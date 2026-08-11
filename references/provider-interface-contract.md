@@ -12,6 +12,7 @@ Every route used by this skill must be describable with these fields. Do not add
 | `task_name` | yes | Identifier used when spawning the agent |
 | `friendly_name` | yes | Human-facing label used in briefs and retention tables |
 | `interface_family` | yes | `native`, `direct_api`, or `subscription_bridge` |
+| `route_provenance` | yes | `runtime_builtin`, `router_registered`, or `user_custom`; ownership metadata, not a transport classification |
 | `model_route` | yes | Provider/model identifier used by the external router, for reference only |
 | `registry_source` | yes | Where the type is registered, such as runtime built-in or a registry file |
 | `availability_check` | yes | How to verify the route is present without creating anything |
@@ -41,6 +42,14 @@ Every route used by this skill must be describable with these fields. Do not add
 - Availability: registered in the runtime registry, and the external router reports the bridge ready.
 - Trust tier: untrusted_router. Outputs are non-official evidence and must be reproduced or independently verified by GPT before acceptance.
 
+### User-custom provider provenance
+
+- Includes user-defined providers and custom subagent roles registered through user-level configuration, as described in `custom-api-routing.md`.
+- Requires a Responses-compatible endpoint or an external adapter/router for Chat Completions-only APIs, plus externally injected credentials.
+- Availability: registered in the runtime registry and passing readiness testing; being user-configured is not itself an availability guarantee.
+- Set `route_provenance = "user_custom"`. Keep `interface_family` as `direct_api` when it uses an official provider API, or `subscription_bridge` when a third-party subscription or bridge is involved.
+- The trust tier follows the mapped family, and user configuration never lowers the evidence requirement.
+
 ## Availability checks
 
 - Check only the runtime agent registry and the external router's own readiness state. Never create, edit, or guess agent types.
@@ -53,6 +62,7 @@ Every route used by this skill must be describable with these fields. Do not add
 - Native evidence: verified through normal tests, static checks, and integration runs.
 - Provider-official evidence (direct API): verify commands, results, and numerical artifacts like any implementation; provider origin is not a substitute for reproduction.
 - Untrusted-router evidence (subscription/bridge): mark as untrusted in the aggregation record; GPT must reproduce the result or verify it through independent evidence before it can support acceptance.
+- User-custom evidence: follows the mapped `direct_api` or `subscription_bridge` policy; custom configuration does not make evidence more trustworthy.
 - Role fit still applies: even a verified route must not be used to change core algorithms unless ownership says otherwise.
 
 ## Registration boundaries
