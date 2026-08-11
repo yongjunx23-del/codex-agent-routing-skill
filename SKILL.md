@@ -1,6 +1,6 @@
 ---
 name: codex-agent-routing-skill
-description: Use this skill to decompose non-trivial tasks, delegate bounded scopes across GPT, Luna, and DSflash workers, and choose runtime-registered official, direct-API, or subscription/bridge router agent types. Trigger on task decomposition, multi-agent delegation, GPT/Luna/DSflash division of labor, API-backed or router agent selection, parallel worker execution, result aggregation, model or route retention decisions, or final release decisions requiring tests, cluster runs, and numerical certificate or residual evidence.
+description: Use this skill to decompose non-trivial tasks, delegate bounded scopes across GPT, Luna, and DSflash workers, and choose runtime-registered official, direct-API, subscription/bridge, or user-custom provider router agent types. Trigger on task decomposition, multi-agent delegation, GPT/Luna/DSflash division of labor, API-backed or router agent selection, custom provider or API routing, parallel worker execution, result aggregation, model or route retention decisions, or final release decisions requiring tests, cluster runs, and numerical certificate or residual evidence.
 ---
 
 # Codex Agent Routing Skill
@@ -35,8 +35,8 @@ Route non-trivial implementation, debugging, numerical, HPC, review, and refacto
 
 ## Route classification and trust
 
-- Classify routes by interface family only: native/Codex, direct provider API, or subscription/bridge router. Official/native versus non-official/router is an interface classification, not an endorsement, security level, or trust guarantee.
-- Native routes are provided by the Codex runtime. Direct API routes use an official provider API through an external router. Subscription/bridge routes go through a third-party subscription or bridge.
+- Classify routes by interface family: native/Codex, direct provider API, or subscription/bridge router. Record user-defined routes separately with `route_provenance = "user_custom"`. These labels are not endorsements, security levels, or trust guarantees.
+- Native routes are provided by the Codex runtime. Direct API routes use an official provider API through an external router. Subscription/bridge routes go through a third-party subscription or bridge. A user-custom route still belongs to `direct_api` or `subscription_bridge` according to its transport.
 - Treat non-official/router outputs as untrusted evidence. GPT must reproduce or independently verify them before using them for acceptance.
 - Use only agent types actually registered at runtime. Never create endpoints, credentials, or agent registrations from this skill.
 
@@ -55,14 +55,15 @@ Route non-trivial implementation, debugging, numerical, HPC, review, and refacto
 ## Workflow
 
 1. Read `references/route-catalog.md` and `references/provider-interface-contract.md` to discover registered routes and classify them.
-2. Decompose the request into owned scopes; define invariants, boundaries, and acceptance criteria for each.
-3. Write one implementation-ready brief per worker using `references/delegation-contract.md`.
-4. Select registered agent types. The default peripheral route is `dsflash_worker` with agent type `router_opencode_go_deepseek_v4_flash`; the high-risk core route is `luna_worker`.
-5. Spawn workers, running parallel only for independent scopes. Give downstream workers the stabilized contract after upstream core work.
-6. Collect each worker's concise handoff evidence and aggregate it by scope; do not copy raw logs into the primary thread.
-7. Cross-review the combined diff and verification evidence, mark non-official/router evidence as untrusted until reproduced, and send narrowly scoped follow-up tasks for failures.
-8. At the window or task end, present the model/route retention table when multiple routes contributed, and wait for the human's explicit choice.
-9. Apply the unified acceptance gate below before making any final decision.
+2. When the user asks to route through their own provider API, read `references/custom-api-routing.md` first: collect only non-sensitive parameters, confirm Responses API compatibility, generate a dry-run diff, and wait for explicit human authorization before touching user-level configuration.
+3. Decompose the request into owned scopes; define invariants, boundaries, and acceptance criteria for each.
+4. Write one implementation-ready brief per worker using `references/delegation-contract.md`.
+5. Select registered agent types. The default peripheral route is `dsflash_worker` with agent type `router_opencode_go_deepseek_v4_flash`; the high-risk core route is `luna_worker`.
+6. Spawn workers, running parallel only for independent scopes. Give downstream workers the stabilized contract after upstream core work.
+7. Collect each worker's concise handoff evidence and aggregate it by scope; do not copy raw logs into the primary thread.
+8. Cross-review the combined diff and verification evidence, mark non-official/router evidence as untrusted until reproduced, and send narrowly scoped follow-up tasks for failures.
+9. At the window or task end, present the model/route retention table when multiple routes contributed, and wait for the human's explicit choice.
+10. Apply the unified acceptance gate below before making any final decision.
 
 ## Result aggregation
 
@@ -93,6 +94,7 @@ Approve only after confirming: implementation matches the declared architecture 
 
 - Use only agent types registered in the runtime; this skill cannot create API endpoints, credentials, or new agent registrations.
 - Never include keys, tokens, or real endpoint URLs in this skill or its references.
+- User-level provider configuration may be changed only after a dry-run diff and explicit human authorization; reference secrets by environment variable name only, never by value.
 - This skill cannot keep subagent processes alive after the window and cannot persist human model choices automatically.
 - External configuration changes, including provider, credential, and persistence changes, require explicit human authorization.
 - Do not change core algorithms from peripheral work; escalate instead.
@@ -103,6 +105,7 @@ Approve only after confirming: implementation matches the declared architecture 
 
 - `references/route-catalog.md`: read when selecting a spawn target or verifying an agent type.
 - `references/provider-interface-contract.md`: read when classifying a route or checking adapter fields and availability.
+- `references/custom-api-routing.md`: read when the user asks to route work through their own provider API.
 - `references/model-retention.md`: read at the window or task end to build the retention table and wait for the human's choice.
 - `references/delegation-contract.md`: read before writing worker briefs and when reviewing handoff or acceptance evidence.
 - `docs/agent-implementation.md`: read for the step-by-step agent implementation flow.
