@@ -23,6 +23,7 @@ Reusable skill for decomposing non-trivial work, delegating bounded scopes acros
 
 ```text
 codex-agent-routing-skill/
+├── .gitignore
 ├── SKILL.md
 ├── README.md
 ├── LICENSE
@@ -30,6 +31,7 @@ codex-agent-routing-skill/
 ├── references/
 │   ├── route-catalog.md
 │   ├── provider-interface-contract.md
+│   ├── custom-api-routing.md
 │   ├── model-retention.md
 │   └── delegation-contract.md
 ├── docs/
@@ -67,7 +69,13 @@ https://github.com/yongjunx23-del/codex-agent-routing-skill
 
 ## Security boundary
 
-This skill never contains or requests real endpoint URLs, keys, or tokens. Non-official/router outputs are untrusted evidence until GPT reproduces or independently verifies them. Provider, credential, and persistent-configuration changes require explicit human authorization.
+This repository never stores real endpoint URLs, keys, or tokens. During an authorized setup, Codex may write a private endpoint directly to user-level configuration, but must keep it redacted from chat, public diffs, logs, and Git. Secret values are never requested or echoed. Non-official/router outputs are untrusted evidence until GPT reproduces or independently verifies them. Provider, credential, and persistent-configuration changes require explicit human authorization.
+
+## Custom API routing
+
+You can route work through your own Responses-compatible provider by registering a user-level provider and a custom subagent role. The skill collects only non-sensitive parameters, generates a dry-run diff, waits for your explicit approval, and registers the route in the catalog only after a readiness test passes. Chat Completions-only APIs require an external adapter or router; the skill never pretends direct compatibility.
+
+Read the full requirements and templates in [custom-api-routing.md](references/custom-api-routing.md), including the copyable Chinese prompt for Codex. A short prompt is also available there; do not ask or echo secret values, and keep real endpoints and keys out of this repository.
 
 ## Model retention flow
 
