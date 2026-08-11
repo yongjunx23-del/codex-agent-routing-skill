@@ -1,0 +1,4 @@
+interface:
+  display_name: "Codex Agent Routing"
+  short_description: "Split work across GPT, Luna, and DSflash workers"
+  default_prompt: "Use $codex-agent-routing-skill to split this task, choose the right worker routes, and review the results."
