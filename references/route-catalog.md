@@ -12,39 +12,40 @@ Official/native versus non-official/router is an **interface classification only
 - **task_name**: identifier used when spawning the agent.
 - **agent_type**: value registered in the runtime; only these values may be spawned.
 - **Interface family**: native, direct_api, or subscription_bridge.
+- **Route provenance**: runtime_builtin, router_registered, or user_custom. This records ownership and never replaces the interface family.
 - **Model route**: provider/model identifier handled by the router, shown for reference only.
 
 ## Built-in and registered worker types (native)
 
-| Friendly name | task_name | agent_type | Interface family | Source | Notes |
-| --- | --- | --- | --- | --- | --- |
-| default | default | default | native | runtime built-in | GPT orchestrator and sole final reviewer |
-| explorer | explorer | explorer | native | runtime built-in | exploratory agent type |
-| worker | worker | worker | native | runtime built-in | general worker agent type |
-| luna_worker | luna_worker | luna_worker | native | `~/.codex/agents/luna-worker.toml` | high-risk core ownership |
+| Friendly name | task_name | agent_type | Interface family | Route provenance | Source | Notes |
+| --- | --- | --- | --- | --- | --- | --- |
+| default | default | default | native | runtime_builtin | runtime built-in | GPT orchestrator and sole final reviewer |
+| explorer | explorer | explorer | native | runtime_builtin | runtime built-in | exploratory agent type |
+| worker | worker | worker | native | runtime_builtin | runtime built-in | general worker agent type |
+| luna_worker | luna_worker | luna_worker | native | runtime_builtin | `~/.codex/agents/luna-worker.toml` | high-risk core ownership |
 
 ## DeepSeek direct API family (direct_api)
 
-| Friendly name | task_name | agent_type | Interface family | Model route |
-| --- | --- | --- | --- | --- |
-| DeepSeek V4 Flash API | use agent_type | `router_deepseek_deepseek_v4_flash` | direct_api | `deepseek/deepseek-v4-flash` |
-| DeepSeek V4 Pro API | use agent_type | `router_deepseek_deepseek_v4_pro` | direct_api | `deepseek/deepseek-v4-pro` |
+| Friendly name | task_name | agent_type | Interface family | Route provenance | Model route |
+| --- | --- | --- | --- | --- | --- |
+| DeepSeek V4 Flash API | use agent_type | `router_deepseek_deepseek_v4_flash` | direct_api | router_registered | `deepseek/deepseek-v4-flash` |
+| DeepSeek V4 Pro API | use agent_type | `router_deepseek_deepseek_v4_pro` | direct_api | router_registered | `deepseek/deepseek-v4-pro` |
 
 ## OpenCode Go family (subscription_bridge)
 
-| Friendly name | task_name | agent_type | Interface family | Model route |
-| --- | --- | --- | --- | --- |
-| DSflash_worker (DeepSeek V4 Flash) | `dsflash_worker` | `router_opencode_go_deepseek_v4_flash` | subscription_bridge | `opencode-go/deepseek-v4-flash` |
-| DeepSeek V4 Pro (opencode Go) | use agent_type | `router_opencode_go_deepseek_v4_pro` | subscription_bridge | `opencode-go/deepseek-v4-pro` |
-| GLM 5.1 (opencode Go) | use agent_type | `router_opencode_go_glm_5_1` | subscription_bridge | `opencode-go/glm-5.1` |
-| GLM 5.2 (opencode Go) | use agent_type | `router_opencode_go_glm_5_2` | subscription_bridge | `opencode-go/glm-5.2` |
-| Grok 4.5 (opencode Go) | use agent_type | `router_opencode_go_grok_4_5` | subscription_bridge | `opencode-go/grok-4.5` |
-| Hy3 (opencode Go) | use agent_type | `router_opencode_go_hy3` | subscription_bridge | `opencode-go/hy3` |
-| Kimi K2.6 (opencode Go) | use agent_type | `router_opencode_go_kimi_k2_6` | subscription_bridge | `opencode-go/kimi-k2.6` |
-| Kimi K2.7 Code (opencode Go) | use agent_type | `router_opencode_go_kimi_k2_7_code` | subscription_bridge | `opencode-go/kimi-k2.7-code` |
-| Kimi K3 (opencode Go) | use agent_type | `router_opencode_go_kimi_k3` | subscription_bridge | `opencode-go/kimi-k3` |
-| MiMo v2.5 (opencode Go) | use agent_type | `router_opencode_go_mimo_v2_5` | subscription_bridge | `opencode-go/mimo-v2.5` |
-| MiMo v2.5 Pro (opencode Go) | use agent_type | `router_opencode_go_mimo_v2_5_pro` | subscription_bridge | `opencode-go/mimo-v2.5-pro` |
+| Friendly name | task_name | agent_type | Interface family | Route provenance | Model route |
+| --- | --- | --- | --- | --- | --- |
+| DSflash_worker (DeepSeek V4 Flash) | `dsflash_worker` | `router_opencode_go_deepseek_v4_flash` | subscription_bridge | router_registered | `opencode-go/deepseek-v4-flash` |
+| DeepSeek V4 Pro (opencode Go) | use agent_type | `router_opencode_go_deepseek_v4_pro` | subscription_bridge | router_registered | `opencode-go/deepseek-v4-pro` |
+| GLM 5.1 (opencode Go) | use agent_type | `router_opencode_go_glm_5_1` | subscription_bridge | router_registered | `opencode-go/glm-5.1` |
+| GLM 5.2 (opencode Go) | use agent_type | `router_opencode_go_glm_5_2` | subscription_bridge | router_registered | `opencode-go/glm-5.2` |
+| Grok 4.5 (opencode Go) | use agent_type | `router_opencode_go_grok_4_5` | subscription_bridge | router_registered | `opencode-go/grok-4.5` |
+| Hy3 (opencode Go) | use agent_type | `router_opencode_go_hy3` | subscription_bridge | router_registered | `opencode-go/hy3` |
+| Kimi K2.6 (opencode Go) | use agent_type | `router_opencode_go_kimi_k2_6` | subscription_bridge | router_registered | `opencode-go/kimi-k2.6` |
+| Kimi K2.7 Code (opencode Go) | use agent_type | `router_opencode_go_kimi_k2_7_code` | subscription_bridge | router_registered | `opencode-go/kimi-k2.7-code` |
+| Kimi K3 (opencode Go) | use agent_type | `router_opencode_go_kimi_k3` | subscription_bridge | router_registered | `opencode-go/kimi-k3` |
+| MiMo v2.5 (opencode Go) | use agent_type | `router_opencode_go_mimo_v2_5` | subscription_bridge | router_registered | `opencode-go/mimo-v2.5` |
+| MiMo v2.5 Pro (opencode Go) | use agent_type | `router_opencode_go_mimo_v2_5_pro` | subscription_bridge | router_registered | `opencode-go/mimo-v2.5-pro` |
 
 ## Canonical DSflash_worker mapping
 
@@ -52,6 +53,7 @@ Official/native versus non-official/router is an **interface classification only
 - task_name: `dsflash_worker`
 - agent_type: `router_opencode_go_deepseek_v4_flash`
 - Interface family: subscription_bridge
+- Route provenance: router_registered
 - Model route: `opencode-go/deepseek-v4-flash`
 
 ## Evidence policy
@@ -64,6 +66,7 @@ Official/native versus non-official/router is an **interface classification only
 
 - Agent types are provided by the runtime or registered through files such as `~/.codex/agents/*.toml`. Router-managed files are generated by the router and must not be edited by this skill.
 - Only spawn agent types actually present at runtime. If a target is missing, stop and report the gap; do not invent a type.
+- User-custom providers and roles may be added only after user-level configuration, readiness testing, and explicit human authorization; see `custom-api-routing.md`.
 - This skill never creates API endpoints, credentials, or new agent registrations. Credential and endpoint configuration belong to the router and its registry.
 - Do not store keys, tokens, or endpoint URLs in this skill.
 - Refresh this catalog whenever the runtime registry changes.
