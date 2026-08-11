@@ -1,0 +1,13 @@
+# Local secrets and provider configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+credentials/
+auth.json
+*.local.toml
+
